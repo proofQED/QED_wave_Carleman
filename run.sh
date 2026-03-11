@@ -259,7 +259,7 @@ for i in $(seq 1 "$MAX_ITERATIONS"); do
     log "Step 1: Running search agent..."
 
     run_claude "Load task from $RENDERED_DIR/prompt_search.md. This is round $i of $MAX_ITERATIONS. Follow all instructions in that file." \
-        "$ROUND_DIR/AUTO_LOG_SEARCH.jsonl"
+        "$ROUND_DIR/AUTO_LOG_SEARCH.log"
 
     if [ ! -f "$ROUND_DIR/candidate.py" ]; then
         log "ERROR: Search agent did not produce $ROUND_DIR/candidate.py"
@@ -275,7 +275,7 @@ for i in $(seq 1 "$MAX_ITERATIONS"); do
     log "Step 2: Running verify agent..."
 
     run_claude "Load task from $RENDERED_DIR/prompt_verify.md. This is round $i. Follow all instructions in that file." \
-        "$ROUND_DIR/AUTO_LOG_VERIFY.jsonl"
+        "$ROUND_DIR/AUTO_LOG_VERIFY.log"
 
     if [ ! -f "$ROUND_DIR/verification_report.md" ]; then
         log "ERROR: Verify agent did not produce verification report"
@@ -293,7 +293,7 @@ for i in $(seq 1 "$MAX_ITERATIONS"); do
     log "Step 3: Running verdict agent..."
 
     VERDICT_OUTPUT=$(run_claude_capture "Load task from $RENDERED_DIR/prompt_verdict.md. Follow all instructions in that file. Reply with exactly one word: DONE or CONTINUE." \
-        "$ROUND_DIR/AUTO_LOG_VERDICT.jsonl")
+        "$ROUND_DIR/AUTO_LOG_VERDICT.log")
     DECISION=$(echo "$VERDICT_OUTPUT" | tail -1)
 
     log "Iteration $i: Decision is '$DECISION'"
