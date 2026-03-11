@@ -1,0 +1,197 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amsthm,amssymb,bm}
+\usepackage{xcolor}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, decorations.shapes}
+\usetikzlibrary{arrows,calc}
+\usepackage{mathrsfs,esint}
+\usepackage{comment}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    linkcolor = red,
+    anchorcolor = green!50!black,
+    citecolor = green!50!black,
+    filecolor = green!50!black,
+    urlcolor = green!50!black
+}
+\usepackage{cleveref}
+
+\usepackage[top=1in, bottom=1in, left=1.25in, right=1.25in]{geometry}
+\usepackage{setspace}
+
+\usepackage{float}
+
+\usepackage{subcaption}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest, compat/show suggested version=false}
+\usepackage{tikz}
+\usetikzlibrary{intersections}
+
+\usepackage{diagbox}
+\usepackage{algorithm, algorithmicx, algpseudocode}
+\numberwithin{algorithm}{section}
+\usepackage{tabularx}
+\usepackage{tcolorbox}
+
+\usepackage[titletoc,toc,title]{appendix}
+\renewcommand\appendixname{Appendix}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{theorem}[thm]{Theorem}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{corollary}[thm]{Corollary}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{remark}[thm]{\textit{Remark}}
+\newtheorem{definition}[thm]{Definition}
+\newtheorem{assumption}[thm]{Assumption}
+\newtheorem{example}[thm]{Example}
+
+\newcommand{\titleShort}{Wave PINNs}
+\newcommand{\titleLong}{Precise Goal and Verification Conditions for the Weight Construction}
+
+\title[\titleShort]{\titleLong}
+
+\thanks{}
+
+\author{Author}
+% \address{Address}
+% \email{Email}
+
+\date{}
+
+% \renewcommand \theequation {\arabic{section}.\arabic{equation}}
+\numberwithin{equation}{section}
+
+\begin{document}
+% \maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Precise Goal}
+\begin{tcolorbox}[colback=green!5, colframe=green!75!blue, title=Goal with necessary conditions]
+For given arbitrary wave speed $c > 0$ and terminal time $T > 0$, find
+\begin{equation*}
+    \left\{
+    \begin{aligned}
+        &\psi(x, t) && \text{function of $x$ and $t$},\\
+        &s         && \text{negative constant},\\
+        &\alpha    && \text{constant},\\
+        &\lambda   && \text{constant},
+    \end{aligned}
+    \right.
+\end{equation*}
+such that the following necessary conditions are satisfied for all $(x, t) \in [0, \infty) \times [0, T]$
+\begin{equation*}
+    \left\{
+    \begin{aligned}
+        &L_{1} \psi \leq L \psi \leq - L_{1} \psi,\\
+        &\lim_{x \to + \infty} \lambda \psi = + \infty,\\
+        &L_{2} \psi \geq 0.
+    \end{aligned}
+    \right.
+\end{equation*}
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=orange!5, colframe=orange!80!blue, title=Sufficient condition]
+The final verification concerns the sufficient condition for all $(x, t) \in [0, \infty) \times [0, T]$
+\begin{equation*}
+    (L_{1} \psi)^{2} - (L \psi)^{2}
+    \geq
+    c^{2} (\partial_{x, t}^{2} \varphi)^{2}.
+\end{equation*}
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=blue!5, colframe=blue!70, title=Definitions and notations]
+\begin{enumerate}
+    \item $\varphi$: function of $x$ and $t$,
+    \begin{equation*}
+        \varphi
+        =
+        \exp(\lambda \psi).
+    \end{equation*}
+
+    \item $\square$: operator acting on functions of $x$ and $t$,
+    \begin{equation*}
+        \square u
+        =
+        \partial_{t}^{2} u - c^{2} \partial_{x}^{2} u.
+    \end{equation*}
+
+    \item $\widetilde{\square}$: operator acting on functions of $x$ and $t$,
+    \begin{equation*}
+        \widetilde{\square} u
+        =
+        |\partial_{t} u|^{2} - c^{2}|\partial_{x} u|^{2}.
+    \end{equation*}
+
+    \item $L$: operator acting on $\psi$,
+    \begin{equation*}
+        L \psi
+        =
+        \lambda^{2} \varphi (\widetilde{\square} \psi)
+        -
+        (\alpha - 1) \lambda \varphi (\square \psi).
+    \end{equation*}
+
+    \item $L_{1}$: operator acting on $\psi$,
+    \begin{equation*}
+        \begin{aligned}
+            L_{1} \psi
+            &=
+            c^{2} \partial_{x}^{2} \varphi
+            +
+            \partial_{t}^{2} \varphi\\
+            &=
+            \lambda^{2} \varphi
+            \left (
+                (\partial_{t} \psi)^{2}
+                +
+                c^{2} (\partial_{x} \psi)^{2}
+            \right )
+            +
+            \lambda \varphi
+            \left (
+                \partial_{t}^{2} \psi
+                +
+                c^{2} \partial_{x}^{2} \psi
+            \right ).
+        \end{aligned}
+    \end{equation*}
+
+    \item $L_{2}$: operator acting on $\psi$,
+    \begin{equation*}
+    \begin{aligned}
+        L_{2}
+        &=
+        \frac{1}{2}
+        \Big (
+            (\alpha - 1) s \lambda (\square (\varphi (\square \psi)))
+            -
+            s \lambda^{2} (\square (\varphi (\widetilde{\square} \psi)))
+        \Big )\\
+        &+
+        \Big (
+            s^{3} \lambda^{3} (\alpha - 1) \varphi^{3} (\widetilde{\square} \psi) (\square \psi)
+            -
+            s^{3} \lambda^{4} \varphi^{3} (\widetilde{\square} \psi)^{2}\\
+            &\qquad+
+            s^{3} \lambda^{3}
+            \left (
+                \partial_{t} (\varphi^{3} (\widetilde{\square} \psi) (\partial_{t} \psi))
+                +
+                c^{2} \partial_{x}(\varphi^{3} (\widetilde{\square} \psi) (\partial_{x} \psi))
+            \right )
+        \Big ).
+    \end{aligned}
+    \end{equation*}
+\end{enumerate}
+\end{tcolorbox}
+Note that $\partial_{x}^{2} u = \partial_{x} (\partial_{x} u) = u_{x x}$.
+This problem comes from the Carleman estimate for the wave operator $\square$.
+$\psi, s, \alpha, \lambda$ could be dependent on $c$ and $T$.
+If multiple $\psi$ are possible, find the smoothest one.
+
+\end{document}
