@@ -58,7 +58,7 @@ So (L₁+L)(L₁−L) = product of two non-positive terms = non-negative ≥ 0. 
 
 ## Diversity Requirement
 
-**Do NOT get stuck on one ansatz family.** If the failed approaches log shows that a particular functional form (e.g. quadratic in x, or separated variables) has failed multiple times in a row, you MUST switch to a fundamentally different construction. Tweaking parameters on a repeatedly failing structure is unlikely to work — change the structure itself.
+**Do NOT get stuck on one ansatz family.** If the failed approaches log shows that a particular functional form (e.g. quadratic in x, or separated variables) has failed multiple times in a row, you should consider switch to a fundamentally different construction. Tweaking parameters on a repeatedly failing structure is unlikely to work — change the structure itself.
 
 Strategies for diversifying:
 - If polynomial forms keep failing, try exponential, logarithmic, or rational forms.

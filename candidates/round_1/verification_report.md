@@ -1,71 +1,111 @@
 # Verification Report — Round 1
 
 ## Candidate Summary
-- psi = -ln(x + c*t + x0) = -ln(x + c*t + 1)
-- alpha = 2
+- psi = -sqrt(x + 1) - log(t + 1)
+- alpha = 1
 - s = -1
-- lambda = -1/2
-- Other params: x0 = 1
+- lambda = -1/10
+- Other params: none
 
 ## Condition Results
 
 ### Necessary Condition 1: L₁ψ ≤ Lψ ≤ −L₁ψ
-- Status: unknown (symbolically) / likely_true (numerically)
-- Condition 1a (L − L₁ ≥ 0): unknown (symbolically) / likely_true (numerically)
-- Condition 1b (−L₁ − L ≥ 0): unknown (symbolically) / likely_true (numerically)
-- Symbolic expression (1a): c²/(2*(c*t + x + 1)^(3/2))
-- Symbolic expression (1b): c²/(2*(c*t + x + 1)^(3/2))
-- Numerical sampling: likely_true; min = 0.000298, max = 2.0 (no violations on sampled grid)
-- Diagnosis: L = 0 exactly because ψ depends on the characteristic variable ξ = x + ct, which makes □ψ = 0 and ˜□ψ = 0 simultaneously. L₁ = −c²/(2ξ^(3/2)) < 0 on the domain since ξ = x + ct + 1 ≥ 1. The condition reduces to 0 − (−c²/(2ξ^(3/2))) = c²/(2ξ^(3/2)) ≥ 0, which holds trivially. The engine reports "unknown" because SymPy declares x, t as general reals (not restricted to x ≥ 0, t ≥ 0), so it cannot prove ξ > 0. On the physical domain [0,∞) × [0,T] with c > 0, we have ξ ≥ 1, so the expression is provably positive. **This condition genuinely holds.**
+- Status: **False** (fails for large t)
+- Condition 1a (L − L₁ ≥ 0): **False** (fails globally; passes only on bounded domain)
+- Condition 1b (−L₁ − L ≥ 0): **True** (provably true for all x ≥ 0, t ≥ 0)
+- Symbolic expression (1a): `(L-L1)/φ = [c²(t+1)²(5 - √(x+1)) + 20(x+1)^(3/2)] / [200(t+1)²(x+1)^(3/2)]`
+- Symbolic expression (1b): `(-L1-L)/φ = [5c²(t+1)² + 16(x+1)^(3/2)] / [200(t+1)²(x+1)^(3/2)]`
+- Numerical sampling (engine range x∈[0,50], t∈[0,10]):
+  - 1a: likely_true, min = 0.00157, max = 0.204
+  - 1b: likely_true, min = 0.00144, max = 0.199
+- **Extended numerical sampling** (x∈[0,200], t∈[0,100]):
+  - 1a **FAILS** for large t and x > 24
+  - 1b: still passes everywhere
+- Diagnosis:
+
+  **Condition 1b** is provably true: the numerator `5c²(t+1)² + 16(x+1)^(3/2)` is a sum of two strictly positive terms.
+
+  **Condition 1a** fails globally. The numerator factors as:
+  ```
+  N = c²(1+t)²(5 - √(x+1)) + 20(x+1)^(3/2)
+  ```
+  - For x ≤ 24 (i.e., √(x+1) ≤ 5): both terms are non-negative, so N > 0. ✓
+  - For x > 24 (i.e., √(x+1) > 5): the first term becomes negative and grows as t². The second term is fixed (independent of t). So for any fixed x > 24, there exists a critical time t* beyond which N < 0.
+
+  Setting N = 0 and solving: `(1+t*)² = 20(x+1)^(3/2) / [c²(√(x+1) - 5)]`. With u = √(x+1), the function f(u) = 20u³/(u-5) has minimum value 3375 at u = 15/2. Therefore condition 1a fails when `c²(1+t)² > 3375`, i.e., `c(1+t) > 15√15 ≈ 58.09`.
+
+  Concrete failure thresholds:
+  | c   | Critical t* (x=50) | Critical t* (x=100) | Critical t* (asymptotic) |
+  |-----|--------------------|---------------------|--------------------------|
+  | 0.5 | 115.6              | 125.8               | 115.2                    |
+  | 1.0 | 57.3               | 62.4                | 57.1                     |
+  | 2.0 | 28.2               | 30.7                | 28.0                     |
+
+  The verify engine's sampling range (t ∈ [0, 10]) misses this failure entirely.
 
 ### Necessary Condition 2: lim(x→+∞) λψ = +∞
-- Status: True
-- λψ = ln(c*t + x + 1)/2
+- Status: **True** (symbolically proven)
+- λψ = √(x+1)/10 + log(t+1)/10
 - Limit value: +∞
-- Diagnosis: λψ = (−1/2)(−ln(ξ)) = ln(ξ)/2, which diverges to +∞ as x → +∞. Symbolically verified by the engine.
+- Diagnosis: Since λ = -1/10 and ψ = -log(1+t) - √(x+1), we get λψ = (1/10)(log(1+t) + √(x+1)), which grows without bound as x → ∞ due to the √(x+1)/10 term. SymPy confirms this symbolically.
 
 ### Necessary Condition 3: L₂ψ ≥ 0
-- Status: True
-- Symbolic expression: 0
-- Numerical sampling: not needed (exact symbolic result)
-- Diagnosis: L₂ = 0 identically. Every term in L₂ contains □ψ or ˜□ψ as a factor, and both vanish because ψ is a function of the characteristic variable ξ = x + ct only. The condition L₂ ≥ 0 is satisfied trivially as 0 ≥ 0.
+- Status: **False** (fails for large t)
+- Symbolic expression: Too complex to display concisely (see engine output); involves products of c⁴, exponentials, and powers of (x+1) and (t+1).
+- Numerical sampling (engine range x∈[0,50], t∈[0,10]):
+  - likely_true, min = 3.91e-6, max = 0.0801
+- **Extended numerical sampling** (x∈[0,200], t∈[0,100]):
+  - **FAILS** for t ≥ 50 (c=1), with L₂ going negative in the region x ∈ [14, 52] approximately.
+  - Example: c=1, t=100, x≈20: L₂ ≈ -8.4e-8
+- Diagnosis: L₂ψ is positive on the engine's default sampling grid but becomes slightly negative at large t. The negative values are very small (order 10⁻⁸), suggesting the candidate is close to satisfying this condition but not quite. The failure region is roughly x ∈ [14, 52] for t ≥ 50 with c=1. The issue is that L₂ contains terms proportional to high powers of (1+t) in the denominator (like (1+t)^{39/10}) but also products of c⁴(1+t)⁴ in the numerator. For large t, certain negative cross-terms involving c² and x² grow faster than the positive terms.
 
 ### Sufficient Condition: (L₁ψ)² − (Lψ)² ≥ c²(φ_xt)²
-- Status: unknown (symbolically) / likely_true (numerically)
-- Symbolic expression: 3*c⁴/(16*(c*t + x + 1)³)
-- Numerical sampling: likely_true; min = 6.67e-08, max = 3.0 (no violations on sampled grid)
-- Diagnosis: With L = 0, the LHS simplifies to L₁² = c⁴/(4ξ³). The cross-derivative φ_xt = −c/(4ξ^(3/2)), so c²(φ_xt)² = c⁴/(16ξ³). The difference is L₁² − c²(φ_xt)² = c⁴/(4ξ³) − c⁴/(16ξ³) = 3c⁴/(16ξ³) > 0 for ξ > 0. On the domain ξ ≥ 1, this is strictly positive. The engine reports "unknown" for the same SymPy domain-declaration reason as Condition 1. **This condition genuinely holds.**
+- Status: **False** (fails for large t)
+- Symbolic expression: `suff/φ² = [-5c⁴(t+1)⁴√(x+1) + 25c⁴(t+1)⁴ - 17c²(t+1)²x² + 180c²(t+1)²x√(x+1) - 34c²(t+1)²x + 180c²(t+1)²√(x+1) - 17c²(t+1)² + 320(x+1)³] / [40000(t+1)⁴(x+1)³]`
+- Numerical sampling (engine range x∈[0,50], t∈[0,10]):
+  - likely_true, min = 2.27e-6, max = 0.0395
+- **Extended numerical sampling:**
+  - c=1: PASSES for t ≤ 50, FAILS at t=70 (min ≈ -8.9e-9 at x≈50)
+  - c=2: PASSES for t ≤ 10, FAILS at t=30 (min ≈ -5.8e-8 at x≈53)
+- Diagnosis: The leading term for large t is `c⁴(t+1)⁴(25 - 5√(x+1))` which is negative for x > 24. This causes the expression to diverge to -∞ as t → ∞ for any fixed x > 24, analogous to the condition 1a failure. The failure threshold is at similar t values. The 320(x+1)³ term (independent of t) cannot compensate for arbitrarily large t.
 
 ## Overall Summary
-- Necessary condition 1: unknown (symbolically) / likely_true (numerically) — **holds by elementary analysis**
-- Necessary condition 2: True
-- Necessary condition 3: True
-- All necessary conditions: unknown (symbolically) / **all hold analytically on the physical domain**
-- Sufficient condition: unknown (symbolically) / likely_true (numerically) — **holds by elementary analysis**
-- **ALL CONDITIONS PASS: False** (per engine output, due to SymPy "unknown" results)
+- Necessary condition 1: **False** (1a fails for large t; 1b is True)
+- Necessary condition 2: **True**
+- Necessary condition 3: **False** (fails for large t, though violations are small ~10⁻⁸)
+- All necessary conditions: **False**
+- Sufficient condition: **False** (fails for large t)
+- **ALL CONDITIONS PASS: False**
 
 ## Failure Analysis
 
-### Why the Engine Reports "unknown" Instead of "True"
+### Root Cause: Unbounded growth of (1+t)² terms relative to spatial terms
 
-The verification engine reports `ALL CONDITIONS PASS: False` only because two conditions have status "unknown" rather than "True". No condition is actually violated — the "unknown" results are an artifact of the SymPy symbolic prover's limitations.
+All three failing conditions share the same structural weakness: the candidate ψ = -log(1+t) - √(x+1) produces operators where certain terms grow as powers of (1+t)² or (1+t)⁴ in the numerator, while the compensating positive spatial terms (like (x+1)^(3/2)) are independent of t. For any fixed x > 24, increasing t eventually overwhelms the spatial terms.
 
-**Root cause:** The symbols `x` and `t` are declared as `sp.symbols('x t', real=True)` in verify_engine.py (line 25). SymPy knows they are real but does NOT know they are non-negative. The expression `c²/(2*(c*t + x + 1)^(3/2))` involves a fractional power of `(c*t + x + 1)`. SymPy cannot determine the sign of `c*t + x + 1` for arbitrary real x, t — it could be negative if x and t are sufficiently negative. Hence SymPy returns `is_nonnegative = None` (unknown).
+**Specifically:**
+1. **Condition 1a** numerator = c²(1+t)²(5 - √(x+1)) + 20(x+1)^(3/2). The first term is O(t²) and negative for x > 24; the second term is O(1) in t. So the condition fails for t > O(1/c).
 
-**Mathematical reality:** On the domain x ∈ [0, ∞), t ∈ [0, T], c > 0, we have:
-- ξ = x + ct + 1 ≥ 0 + 0 + 1 = 1 > 0
-- Therefore ξ^(3/2) > 0, and all expressions of the form (positive constant)/ξ^k are strictly positive.
+2. **Condition 1b** works because both terms in its numerator are positive — this is the key asymmetry. The (1+t)² growth in condition 1b is in a *positive* coefficient (5c²(1+t)²), whereas in condition 1a it multiplies a coefficient that changes sign.
 
-Both the numerical sampling (no violations found across the entire grid) and the elementary analysis confirm that **all four conditions hold on the physical domain**.
+3. **Conditions 3 and sufficient** inherit the same problem through the operators L and L₁ whose difference involves condition-1a-type expressions raised to higher powers.
 
-### What Would Be Needed for Symbolic "True"
+### Why the engine reported "unknown" instead of "False"
 
-To get the engine to report `True` symbolically, one would need to either:
-1. Declare `x` and `t` with `nonnegative=True` in verify_engine.py (but we are instructed not to modify it), OR
-2. Choose a ψ whose resulting expressions have signs provable by SymPy without domain assumptions — e.g., expressions that are sums of squares, or that factor into manifestly positive terms.
+The verify engine:
+- Uses SymPy's symbolic sign-checking, which returned "unknown" because x, t are declared as `real=True` (not `nonnegative=True`), and the expressions involve √(x+1) which SymPy cannot reason about for arbitrary real x.
+- Falls back to numerical sampling on x ∈ [0, 50], t ∈ [0, 10], c ∈ {0.5, 1, 2}. This range is too small to detect failures that occur at t > 28 (for c=2) or t > 57 (for c=1).
 
-### Assessment
+### What the next candidate needs
 
-This candidate appears to be a **genuine solution** to the weight construction problem. The characteristic-variable approach (ψ depending on ξ = x + ct) is elegant: it kills both □ψ and ˜□ψ simultaneously, zeroing out L and L₂ exactly, and reducing all conditions to simple sign checks on L₁. The parameter choice λ = −1/2 (satisfying −1 < λ < 0) ensures L₁ < 0, and the shift x₀ = 1 guarantees ξ ≥ 1 > 0 on the domain.
+To fix condition 1a, the candidate must ensure that the expression `(L - L₁)/φ` does not have terms that grow with t while being negative for large x. Two strategies:
 
-The only "failure" is that the symbolic prover cannot confirm what is mathematically obvious. If the engine were domain-aware, this candidate would pass all conditions with status True.
+1. **Make ψ_x decay faster.** The problematic term is `-2c²λ²(ψ_x)²` in `(L-L₁)/φ`. With ψ_x = -1/(2√(x+1)), we get (ψ_x)² = 1/(4(x+1)), which decays only as O(1/x). If ψ_x decayed faster (e.g., exponentially), the negative contribution would be negligible.
+
+2. **Make the "Laplacian" ψ_tt + c²ψ_xx grow with t.** Currently ψ_tt = 1/(1+t)² which *decays* with t. If instead ψ_tt grew or stayed constant, it could compensate the growing negative terms. However, ψ_tt > 0 requires concavity which is hard to maintain with growing second derivatives.
+
+3. **Use a separable form ψ(x,t) = f(x) + g(t) where both f and g are chosen so that the cross-terms in the operators maintain consistent signs.** The current failure arises because the x-dependent sign change at x=24 (where √(x+1) = 5 = 1/(2|λ|)) interacts with t-growth. Choosing |λ| even smaller would push this threshold to larger x, but would not eliminate the asymptotic failure.
+
+4. **Consider ψ forms where ψ_x is bounded by a function of t that decays appropriately.** For instance, ψ = -log(1+t) - log(1+x) would give ψ_x = -1/(1+x) with (ψ_x)² = 1/(1+x)² decaying as O(1/x²), and ψ_xx = 1/(1+x)² > 0. But one must check that condition 2 (λψ → +∞) still holds.
+
+5. **Most promising direction:** The fundamental issue is that (ψ_x)² doesn't decay fast enough relative to ψ_xx. For ψ_x ~ -x^(-p), we have (ψ_x)² ~ x^(-2p) and ψ_xx ~ x^(-p-1). The ratio (ψ_x)²/ψ_xx ~ x^(-p+1). For this ratio to → 0 as x → ∞ (so that the λ² gradient term doesn't dominate the λ Laplacian term), we need p > 1. The current candidate has p = 1/2 (from √(x+1)), so p < 1, which is insufficient. **Try p > 1**, e.g., ψ involving -(x+1)^q for q < 1/2, or -log(x+1), which gives p = 1 (borderline).

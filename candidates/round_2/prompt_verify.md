@@ -86,3 +86,4 @@ IMPORTANT:
 - If the engine crashes, report the error in the verification report.
 - The failure analysis section is the most important part — it guides the next search iteration.
 - Be precise about which terms dominate and why conditions fail.
+- When showing that the candidate satisfy the sufficient condition, be extra careful, put your verification in solid math work that can pass all peer reviews.

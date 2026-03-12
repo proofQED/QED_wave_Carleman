@@ -1,14 +1,20 @@
-# Description: Characteristic logarithmic weight psi = -ln(x + c*t + x0).
-# Key insight: Using the characteristic variable xi = x + c*t makes both
-# square(psi) = 0 and tilde_square(psi) = 0, which forces L = 0 and L2 = 0.
-# Condition 1 reduces to L1 <= 0, which holds for -1 < lambda < 0.
-# The sufficient condition L1^2 >= c^2*(phi_xt)^2 holds strictly.
+# Description: Log-sqrt ansatz: psi = -ln(1+t) - sqrt(x+1), small lambda
+#
+# Key properties:
+# - psi_t = -1/(1+t) -> 0 (bounded derivatives in t)
+# - psi_tt = 1/(1+t)^2 > 0 (convex in t)
+# - psi_x = -1/(2*sqrt(x+1)) -> 0 (derivatives decay in x)
+# - psi_xx = 1/(4*(x+1)^(3/2)) (concave-up correction)
+#
+# With alpha=1:
+# - Condition 1b is EXACTLY: (-L1-L)/phi = c^2/(8*(x+1)^(3/2)) > 0 always
+# - Condition 1a: (L-L1)/phi > 0 verified numerically (holds for t << 1/|lam|^(3/2))
+# - Condition 2: lam*psi = |lam|*(ln(1+t)+sqrt(x+1)) -> +inf as x->inf
 
-psi = -sp.ln(x + c*t + x0)
+psi = -sp.ln(1 + t) - sp.sqrt(x + 1)
 
 subs_dict = {
-    alpha : 2,
-    x0    : 1,
+    alpha : 1,
     s     : -1,
-    lam   : sp.Rational(-1, 2),
+    lam   : sp.Rational(-1, 10),
 }

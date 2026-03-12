@@ -87,3 +87,4 @@ IMPORTANT:
 - The failure analysis section is the most important part — it guides the next search iteration.
 - Be precise about which terms dominate and why conditions fail.
 - When showing that the candidate satisfy the sufficient condition, be extra careful, put your verification in solid math work that can pass all peer reviews.
+- If a candidate satisfied all constraints soildly, then put the final candidate in winning_candidate.py and generating winning_report.md
