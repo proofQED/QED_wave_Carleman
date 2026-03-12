@@ -192,8 +192,8 @@ print()
 cond_1a_expr = sp.simplify( L_test - L1_test )
 cond_1b_expr = sp.simplify( - L1_test - L_test )
 
-cond_1a = truth_value_from_sign( cond_1a_expr, '>=0' )
-cond_1b = truth_value_from_sign( cond_1b_expr, '>=0' )
+cond_1a = truth_value_from_sign( cond_1a_expr, '>0' )
+cond_1b = truth_value_from_sign( cond_1b_expr, '>0' )
 
 cond_1 = (
     True if ( cond_1a is True and cond_1b is True ) else
@@ -237,7 +237,7 @@ print()
 #     L2 psi >= 0
 # ============================================================
 cond_3_expr = sp.simplify( L2_test )
-cond_3 = truth_value_from_sign( cond_3_expr, '>=0' )
+cond_3 = truth_value_from_sign( cond_3_expr, '>0' )
 
 print( 'L2 psi =' )
 sp.pprint( sp.factor( cond_3_expr ) )

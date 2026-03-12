@@ -254,8 +254,8 @@ def run_verification(psi_expr, subs_dict):
     cond_1a_expr = sp.simplify(ops['L'] - ops['L1'])
     cond_1b_expr = sp.simplify(-ops['L1'] - ops['L'])
 
-    cond_1a = truth_value_from_sign(cond_1a_expr, '>=0')
-    cond_1b = truth_value_from_sign(cond_1b_expr, '>=0')
+    cond_1a = truth_value_from_sign(cond_1a_expr, '>0')
+    cond_1b = truth_value_from_sign(cond_1b_expr, '>0')
 
     cond_1 = (
         True if (cond_1a is True and cond_1b is True) else
@@ -272,9 +272,9 @@ def run_verification(psi_expr, subs_dict):
         num_1b_status, num_1b = numerical_check(cond_1b_expr)
         log(f'Condition 1b numerical sampling: {num_1b_status} {num_1b}')
 
-    log(f'Condition 1a (L - L1 >= 0): {fmt(cond_1a)}')
+    log(f'Condition 1a (L - L1 > 0): {fmt(cond_1a)}')
     log(f'  expression = {sp.factor(cond_1a_expr)}')
-    log(f'Condition 1b (-L1 - L >= 0): {fmt(cond_1b)}')
+    log(f'Condition 1b (-L1 - L > 0): {fmt(cond_1b)}')
     log(f'  expression = {sp.factor(cond_1b_expr)}')
     log(f'Necessary condition 1: {fmt(cond_1)}')
     log()
@@ -307,7 +307,7 @@ def run_verification(psi_expr, subs_dict):
     # 4. Necessary condition 3:  L2 psi >= 0
     # ----------------------------------------------------------
     cond_3_expr = sp.simplify(ops['L2'])
-    cond_3 = truth_value_from_sign(cond_3_expr, '>=0')
+    cond_3 = truth_value_from_sign(cond_3_expr, '>0')
 
     num_3 = None
     if cond_3 == 'unknown':
