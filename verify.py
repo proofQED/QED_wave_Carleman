@@ -49,7 +49,7 @@ L2 = (
         - s ** 3 * lam ** 4 * phi ** 3 * tilde_square( psi )**2
         + s ** 3 * lam ** 3 * (
             sp.diff( phi ** 3 * tilde_square( psi ) * sp.diff( psi, t ), t )
-            + c ** 2 * sp.diff( phi ** 3 * tilde_square( psi ) * sp.diff( psi, x ), x )
+            - c ** 2 * sp.diff( phi ** 3 * tilde_square( psi ) * sp.diff( psi, x ), x )
         )
     )
 )

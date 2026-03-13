@@ -65,7 +65,7 @@ def build_operators(psi_expr, subs):
             + s**3 * lam**3 * (
                 sp.diff(phi_sym**3 * tilde_square(psi_expr)
                         * sp.diff(psi_expr, t), t)
-                + c**2 * sp.diff(phi_sym**3 * tilde_square(psi_expr)
+                - c**2 * sp.diff(phi_sym**3 * tilde_square(psi_expr)
                                  * sp.diff(psi_expr, x), x)
             )
         )
