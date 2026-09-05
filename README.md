@@ -1,4 +1,6 @@
-# Wave PINN — Automated Weight Function Search
+# Wave Carleman — Automated Weight Function Search
+
+The project's former internal name was `wave_PINN`, which still appears in the archived records and Python files.
 
 **Model used:** This archived run mainly used Claude Opus 4.6 (`claude-opus-4-6`).
 
@@ -30,7 +32,7 @@ Additionally, the following CLI tools must be on `$PATH`:
 ## Quick Start
 
 ```bash
-cd /path/to/wave_PINN  # replace with your checkout location
+cd /path/to/wave_Carleman  # replace with your checkout location
 ./run.sh          # default 15 iterations
 ./run.sh 30       # custom max iterations
 ```
@@ -91,7 +93,7 @@ cd /path/to/wave_PINN  # replace with your checkout location
 The checked-in `candidates/` files preserve the original seven-round search, including its reasoning, verification reports, and execution logs. The root-level `tmp_*.py` files contain exploratory mathematical analyses and are retained as research records. Historical prompts and logs contain paths from the original machine; `run.sh` renders new prompts for the current checkout before each round. `clean.sh` deletes the archived rounds and winning outputs, so use it only when intentionally resetting the search.
 
 ```
-wave_PINN/
+wave_Carleman/
 │
 │  # ── Problem definition ──
 ├── problem.tex               # LaTeX: full problem statement with operator definitions
