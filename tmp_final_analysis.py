@@ -1,7 +1,5 @@
 import sympy as sp
 import mpmath
-import sys
-sys.path.insert(0, '/local/home/cyanz/wave_PINN')
 from verify_engine import x, t, c, x0, alpha, s, lam, build_operators, truth_value_from_sign, run_verification
 
 mpmath.mp.dps = 50

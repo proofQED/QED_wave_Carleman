@@ -6,8 +6,6 @@ Also explore: psi = -log((1+x)^2 + c^2*t^2) which mixes x and t symmetrically.
 """
 import sympy as sp
 import mpmath
-import sys
-sys.path.insert(0, '/local/home/cyanz/wave_PINN')
 from verify_engine import x, t, c, x0, alpha, s, lam, build_operators, truth_value_from_sign, run_verification
 
 print("="*80)

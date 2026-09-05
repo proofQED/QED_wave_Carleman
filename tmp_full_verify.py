@@ -5,8 +5,6 @@ with alpha=1, s=-1/100, lam=-1/20.
 Prove ALL conditions symbolically.
 """
 import sympy as sp
-import sys
-sys.path.insert(0, '/local/home/cyanz/wave_PINN')
 from verify_engine import x, t, c, x0, alpha, s, lam, build_operators, run_verification
 
 psi_new = -sp.ln(1 + x + c*t) - sp.ln(1 + c*t)

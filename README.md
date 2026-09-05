@@ -1,6 +1,12 @@
 # Wave PINN — Automated Weight Function Search
 
-Automated search for a Carleman estimate weight function using a three-agent loop: **Search**, **Verify**, **Verdict**.
+**Model used:** This archived run mainly used Claude Opus 4.6 (`claude-opus-4-6`).
+
+This repository is an instance of an early development version of **QED**, specialized to searching for a weight function for a Carleman estimate. For the current system, see the [QED repository](https://github.com/proofQED/QED). The associated paper is [QED: An Open-Source Multi-Agent System for Generating Mathematical Proofs on Open Problems](https://openreview.net/forum?id=EPCNlZRUc3).
+
+> The early development run archived here used **7 rounds**. With a more advanced version of QED and a more capable model, the same problem is expected to require only 1 round.
+
+Automated search for a weight function for a Carleman estimate using a three-agent loop: **Search**, **Verify**, **Verdict**.
 
 Given the wave operator `□u = u_tt − c² u_xx`, the pipeline finds `ψ(x,t)`, `s`, `α`, `λ` such that a set of necessary and sufficient conditions hold on `[0,∞) × [0,T]`. The full problem is defined in `problem.tex`.
 
@@ -24,7 +30,7 @@ Additionally, the following CLI tools must be on `$PATH`:
 ## Quick Start
 
 ```bash
-cd /home/cyanz/wave_PINN
+cd /path/to/wave_PINN  # replace with your checkout location
 ./run.sh          # default 15 iterations
 ./run.sh 30       # custom max iterations
 ```
@@ -82,6 +88,8 @@ cd /home/cyanz/wave_PINN
 
 ## File Structure
 
+The checked-in `candidates/` files preserve the original seven-round search, including its reasoning, verification reports, and execution logs. The root-level `tmp_*.py` files contain exploratory mathematical analyses and are retained as research records. Historical prompts and logs contain paths from the original machine; `run.sh` renders new prompts for the current checkout before each round. `clean.sh` deletes the archived rounds and winning outputs, so use it only when intentionally resetting the search.
+
 ```
 wave_PINN/
 │
@@ -104,7 +112,7 @@ wave_PINN/
 ├── render_prompts.py         # Jinja2 renderer: fills templates with real paths per round
 ├── run.sh                    # Main loop: render → search → verify → verdict
 │
-│  # ── Candidates (generated at runtime) ──
+│  # ── Candidates (archived run and runtime outputs) ──
 └── candidates/
     ├── example_candidate.py  # Example candidate (for testing the engine)
     │
@@ -221,4 +229,21 @@ tail -f candidates/orchestrate_log.txt
 
 # Check a specific round's result
 cat candidates/round_3/verification_report.md
+```
+
+## Citation
+
+If you find this early development instance useful, please cite the QED paper:
+
+Chenyang An, Qihao Ye, Minghao Pan, and Jiayun Zhang. (2026). [QED: An Open-Source Multi-Agent System for Generating Mathematical Proofs on Open Problems](https://openreview.net/forum?id=EPCNlZRUc3).
+
+```bibtex
+@inproceedings{
+    an2026qed,
+    title={{QED}: An Open-Source Multi-Agent System for Generating Mathematical Proofs on Open Problems},
+    author={Chenyang An and Qihao Ye and Minghao Pan and Jiayun Zhang},
+    booktitle={3rd AI for Math Workshop: Toward Self-Evolving Scientific Agents},
+    year={2026},
+    url={https://openreview.net/forum?id=EPCNlZRUc3}
+}
 ```

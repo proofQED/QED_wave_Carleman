@@ -4,8 +4,6 @@ Use high-precision mpmath directly on the symbolic expression.
 """
 import sympy as sp
 import mpmath
-import sys
-sys.path.insert(0, '/local/home/cyanz/wave_PINN')
 from verify_engine import x, t, c, x0, alpha, s, lam, build_operators
 
 mpmath.mp.dps = 200  # Very high precision
